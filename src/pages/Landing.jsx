@@ -230,7 +230,7 @@ export default function Landing() {
                 <div className="t-line" id="tl7">
                   <span style={{color:'var(--primary-light)'}}>"name":</span>
                   <span style={{color:'var(--success)', margin:'0 8px'}}>"pikachu"</span>
-                  <span style={{color:'var(--text-3)'}}>// response forwarded</span>
+                  <span style={{color:'var(--text-3)'}}>{/* response forwarded */}</span>
                 </div>
               </div>
             </div>
@@ -327,9 +327,9 @@ export default function Landing() {
           NexusAPI
         </div>
         <div style={{display:'flex', gap:24}}>
-          <a href="#" style={{fontSize:12, color:'var(--text-3)', textDecoration:'none'}}>Docs</a>
-          <a href="#" style={{fontSize:12, color:'var(--text-3)', textDecoration:'none'}}>GitHub</a>
-          <a href="#" style={{fontSize:12, color:'var(--text-3)', textDecoration:'none'}}>Privacy</a>
+          <Link to="/" style={{fontSize:12, color:'var(--text-3)', textDecoration:'none'}}>Docs</Link>
+          <Link to="/" style={{fontSize:12, color:'var(--text-3)', textDecoration:'none'}}>GitHub</Link>
+          <Link to="/" style={{fontSize:12, color:'var(--text-3)', textDecoration:'none'}}>Privacy</Link>
         </div>
         <div style={{fontSize:12, color:'var(--text-3)', fontFamily:'DM Mono, monospace'}}>
           © 2026 NexusAPI. Built with MERN + Redis.
