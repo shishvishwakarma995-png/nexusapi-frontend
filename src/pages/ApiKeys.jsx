@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Navbar from '../components/Navbar';
 import {
-  useApis, useCreateApi, useKeys,
+  useApis, useCreateApi, useKeys, useUpdateApi, useDeleteApi,
   useGenerateKey, useRevokeKey, useRotateKey,
 } from '../hooks/useApis';
 
@@ -252,7 +252,83 @@ function CreateApiModal({ onClose }) {
   );
 }
 
+/* ─── Update API Modal ───────────────────────────── */
+function UpdateApiModal({ api, onClose }) {
+  const [form, setForm] = useState({ 
+    name: api?.name || '', 
+    baseUrl: api?.baseUrl || '', 
+    description: api?.description || '' 
+  });
+  const [error, setError] = useState('');
+  const updateApi = useUpdateApi();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    try {
+      await updateApi.mutateAsync({ id: api._id, data: form });
+      onClose();
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to update API');
+    }
+  };
+
+  return (
+    <div className="modal-overlay">
+      <div className="modal">
+        <div className="modal-header">
+          <h3 className="modal-title">✏️ Edit API</h3>
+          <button className="modal-close-btn" onClick={onClose}>✕</button>
+        </div>
+
+        {error && <div className="alert alert-error"><span>⚠</span> {error}</div>}
+
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label className="form-label">API name</label>
+            <input
+              value={form.name}
+              onChange={e => setForm(p => ({ ...p, name: e.target.value }))}
+              required
+              className="form-input"
+            />
+          </div>
+          <div className="form-group">
+            <label className="form-label">Base URL</label>
+            <input
+              type="url"
+              value={form.baseUrl}
+              onChange={e => setForm(p => ({ ...p, baseUrl: e.target.value }))}
+              required
+              className="form-input"
+            />
+          </div>
+          <div className="form-group">
+            <label className="form-label">Description</label>
+            <textarea
+              value={form.description}
+              onChange={e => setForm(p => ({ ...p, description: e.target.value }))}
+              rows={2}
+              className="form-input"
+              style={{ resize: 'vertical' }}
+            />
+          </div>
+          <button
+            type="submit"
+            disabled={updateApi.isPending}
+            className="btn btn-primary w-full"
+            style={{ justifyContent: 'center', padding: '11px' }}
+          >
+            {updateApi.isPending ? 'Updating...' : 'Save Changes'}
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}
+
 /* ─── Key Card ───────────────────────────────────── */
+
 function KeyCard({ apiKey, onRevoke, onRotate, revoking, rotating }) {
   return (
     <div
@@ -343,6 +419,7 @@ function KeyCard({ apiKey, onRevoke, onRotate, revoking, rotating }) {
 export default function ApiKeys() {
   const [showGenModal,  setShowGenModal]  = useState(false);
   const [showApiModal,  setShowApiModal]  = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const [newKeyData,    setNewKeyData]    = useState(null);
   const [selectedApiId, setSelectedApiId] = useState('');
 
@@ -350,6 +427,20 @@ export default function ApiKeys() {
   const { data: keys,  isLoading: keysLoading } = useKeys(selectedApiId || undefined);
   const revokeKey = useRevokeKey();
   const rotateKey = useRotateKey();
+  const deleteApi = useDeleteApi();
+
+  const selectedApi = apis?.find(a => a._id === selectedApiId);
+
+  const handleDeleteApi = async () => {
+    if (!selectedApi) return;
+    if (!window.confirm(`Delete "${selectedApi.name}"? All associated keys will be revoked.`)) return;
+    try {
+      await deleteApi.mutateAsync(selectedApi._id);
+      setSelectedApiId('');
+    } catch (err) {
+      alert('Delete failed: ' + (err.response?.data?.message || 'Error'));
+    }
+  };
 
   const handleRevoke = async (id) => {
     if (!window.confirm('Revoke this key? This action cannot be undone.')) return;
@@ -373,6 +464,7 @@ export default function ApiKeys() {
 
           {/* Modals */}
           {showApiModal  && <CreateApiModal  onClose={() => setShowApiModal(false)} />}
+          {showEditModal && <UpdateApiModal  api={selectedApi} onClose={() => setShowEditModal(false)} />}
           {showGenModal  && <GenerateKeyModal apis={apis} onClose={() => setShowGenModal(false)} onGenerated={d => { setShowGenModal(false); setNewKeyData(d); }} />}
           {newKeyData    && <NewKeyModal keyData={newKeyData} onClose={() => setNewKeyData(null)} />}
 
@@ -383,6 +475,12 @@ export default function ApiKeys() {
               <p className="page-subtitle">Register your APIs, generate and manage access keys</p>
             </div>
             <div style={{ display: 'flex', gap: 8 }}>
+              {selectedApiId && (
+                <>
+                  <button className="btn btn-danger" onClick={handleDeleteApi}>🗑️ Delete API</button>
+                  <button className="btn btn-secondary" onClick={() => setShowEditModal(true)}>✏️ Edit API</button>
+                </>
+              )}
               <button className="btn btn-secondary" onClick={() => setShowApiModal(true)}>+ Register API</button>
               <button className="btn btn-primary"   onClick={() => setShowGenModal(true)}>⚡ Generate Key</button>
             </div>

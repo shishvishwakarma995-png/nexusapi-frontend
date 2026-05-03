@@ -39,6 +39,17 @@ export const useDeleteApi = () => {
   });
 };
 
+export const useUpdateApi = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, data }) => apisService.update(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['apis'] });
+    },
+  });
+};
+
 // =====================
 // Keys Hooks
 // =====================
