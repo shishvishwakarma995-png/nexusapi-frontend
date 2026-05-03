@@ -9,6 +9,7 @@ import ApiKeys from './pages/ApiKeys';
 import Logs from './pages/Logs';
 import Billing from './pages/Billing';
 import Settings from './pages/Settings';
+import Landing from './pages/Landing';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -22,6 +23,7 @@ function App() {
       <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <AuthProvider>
           <Routes>
+            <Route path="/" element={<Landing />} />
             <Route path="/login"    element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
@@ -29,7 +31,6 @@ function App() {
             <Route path="/logs"      element={<ProtectedRoute><Logs /></ProtectedRoute>} />
             <Route path="/billing"   element={<ProtectedRoute><Billing /></ProtectedRoute>} />
             <Route path="/settings"  element={<ProtectedRoute><Settings /></ProtectedRoute>} />
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
           </Routes>
         </AuthProvider>
       </BrowserRouter>

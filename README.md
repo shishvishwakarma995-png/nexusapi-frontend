@@ -1,70 +1,44 @@
-# Getting Started with Create React App
+# ⚡ NexusAPI - Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+The beautiful, modern React dashboard for **NexusAPI**. It allows developers to register their backend APIs, generate and rotate API keys, view live traffic analytics, and manage their subscription plans.
 
-## Available Scripts
+## 🚀 Tech Stack
+- **Framework**: React.js (Create React App)
+- **Routing**: React Router DOM
+- **Data Fetching**: Axios & React Query (@tanstack/react-query)
+- **Charts**: Recharts
+- **Styling**: Vanilla CSS (Custom modern design system)
 
-In the project directory, you can run:
+## ✨ Core Features
+- **Live Analytics Dashboard**: Visualizes API traffic volume, success rates, and latency using dynamic area charts.
+- **API Registry**: Allows users to register downstream API endpoints to be proxied.
+- **Key Management**: Generate secure API keys, revoke compromised keys, and automatically rotate keys.
+- **Request Logs**: View a historical, searchable table of every request made through the gateway.
+- **Billing & Subscriptions**: Upgrade plans to unlock higher rate limits and monthly quotas.
+- **Profile Settings**: Manage account details and security.
 
-### `npm start`
+## 🛠️ Environment Variables
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+To run this project locally, create a `.env` file in the root directory (or just use the default fallback):
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+```env
+REACT_APP_API_URL=http://localhost:5000/api
+```
+*(In production, this should point to your deployed backend API URL, e.g., `https://nexusapi-backend.onrender.com/api`)*
 
-### `npm test`
+## 📦 Running Locally
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-### `npm run build`
+2. Start the development server:
+   ```bash
+   npm start
+   ```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+3. The app will open at `http://localhost:3000`.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## 🎨 Design Philosophy
+This UI was built completely from scratch without component libraries like Tailwind or Material UI. It utilizes a custom CSS design system (`index.css`) featuring glassmorphism, subtle micro-animations, and a highly polished layout to deliver a premium developer experience.
