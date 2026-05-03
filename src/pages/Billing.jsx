@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
@@ -52,19 +52,40 @@ export default function Billing() {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
 
+  useEffect(() => {
+    const query = new URLSearchParams(window.location.search);
+    if (query.get('success')) {
+      setMessage('Payment successful! Your plan has been upgraded.');
+      checkAuth();
+      window.history.replaceState(null, '', window.location.pathname);
+    }
+    if (query.get('canceled')) {
+      setError('Payment was canceled.');
+      window.history.replaceState(null, '', window.location.pathname);
+    }
+  }, [checkAuth]);
+
   const handleUpgrade = async (planId) => {
     if (planId === user.plan) return;
+    if (planId === 'enterprise') {
+      window.location.href = 'mailto:sales@nexusapi.com';
+      return;
+    }
     
     setLoadingPlan(planId);
     setMessage('');
     setError('');
 
     try {
-      const { data } = await api.post('/payment/upgrade', { plan: planId });
-      setMessage(data.message);
-      await checkAuth(); // Refresh user data to get new plan
+      const { data } = await api.post('/payment/create-checkout-session', { plan: planId });
+      if (data.url) {
+        window.location.href = data.url; // Redirect to Stripe Checkout
+      } else {
+        setMessage(data.message); // Fallback mock handling
+        await checkAuth();
+      }
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to process payment');
+      setError(err.response?.data?.message || 'Failed to initialize payment');
     } finally {
       setLoadingPlan(null);
     }
